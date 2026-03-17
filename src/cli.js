@@ -50,6 +50,52 @@ function output(data) {
 }
 
 switch (command) {
+  case 'init': {
+    // Initialize skill-bus in current directory
+    const initDir = getFlag('dir', process.cwd());
+    const { mkdirSync, writeFileSync: wf, existsSync: ex } = await import('node:fs');
+
+    const dirs = [
+      'skills/prompt-request-bus',
+      'skills/self-improving-skills',
+      'skills/knowledge-watcher',
+    ];
+
+    for (const d of dirs) {
+      const full = resolve(initDir, d);
+      mkdirSync(full, { recursive: true });
+    }
+
+    const files = {
+      'skills/prompt-request-bus/prompt-request-queue.jsonl': '',
+      'skills/prompt-request-bus/active-locks.jsonl': '',
+      'skills/prompt-request-bus/dag-state.jsonl': '',
+      'skills/prompt-request-bus/prompt-request-history.md': '# Prompt Request History\n',
+      'skills/self-improving-skills/skill-runs.jsonl': '',
+      'skills/self-improving-skills/skill-health.json': '{"lastUpdated":"","skills":{}}',
+      'skills/self-improving-skills/skill-improvements.md': '# Skill Improvements\n',
+      'skills/knowledge-watcher/knowledge-state.json': '{"lastCheck":"","sources":{}}',
+      'skills/knowledge-watcher/knowledge-diffs.jsonl': '',
+    };
+
+    let created = 0;
+    for (const [f, content] of Object.entries(files)) {
+      const full = resolve(initDir, f);
+      if (!ex(full)) {
+        wf(full, content);
+        created++;
+      }
+    }
+
+    output({
+      status: 'initialized',
+      directory: initDir,
+      filesCreated: created,
+      message: `Agent Skill Bus initialized. Run 'skill-bus stats' to verify.`,
+    });
+    break;
+  }
+
   case 'enqueue': {
     const pr = queue.enqueue({
       source: getFlag('source', 'human'),
@@ -166,6 +212,10 @@ switch (command) {
     console.log(`Agent Skill Bus v1.0.0
 
 Usage: skill-bus <command> [options]
+       npx agent-skill-bus <command> [options]
+
+Setup:
+  init          Initialize skill-bus in current directory
 
 Queue Commands:
   enqueue       Add a prompt request to the queue

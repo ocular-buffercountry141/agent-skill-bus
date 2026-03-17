@@ -5,7 +5,8 @@
   "type": "module",
   "main": "src/index.js",
   "bin": {
-    "skill-bus": "src/cli.js"
+    "skill-bus": "src/cli.js",
+    "agent-skill-bus": "src/cli.js"
   },
   "scripts": {
     "test": "node --test src/**/*.test.js",

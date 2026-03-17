@@ -41,44 +41,32 @@ Agent Skill Bus solves all four.
 
 ## Quick Start
 
-### 1. Copy the skills you need
-
 ```bash
-# All three (recommended)
-cp -r skills/prompt-request-bus your-workspace/skills/
-cp -r skills/self-improving-skills your-workspace/skills/
-cp -r skills/knowledge-watcher your-workspace/skills/
+# One command to set up everything
+npx agent-skill-bus init
 
-# Or just one
-cp -r skills/prompt-request-bus your-workspace/skills/
+# Log a skill execution
+npx agent-skill-bus record-run --agent my-agent --skill api-caller --task "fetch data" --result success --score 1.0
+
+# Check what needs attention
+npx agent-skill-bus flagged
+
+# Queue a task
+npx agent-skill-bus enqueue --source human --priority high --agent dev --task "Fix auth bug"
+
+# See what's ready to dispatch
+npx agent-skill-bus dispatch
 ```
 
-### 2. Initialize data files
+### For Claude Code / Codex users
 
-```bash
-# Prompt Request Bus
-touch your-workspace/skills/prompt-request-bus/prompt-request-queue.jsonl
-touch your-workspace/skills/prompt-request-bus/active-locks.jsonl
-echo '{}' > your-workspace/skills/prompt-request-bus/dag-state.jsonl
-
-# Self-Improving Skills
-touch your-workspace/skills/self-improving-skills/skill-runs.jsonl
-echo '{"lastUpdated":"","skills":{}}' > your-workspace/skills/self-improving-skills/skill-health.json
-
-# Knowledge Watcher
-echo '{"lastCheck":"","sources":{}}' > your-workspace/skills/knowledge-watcher/knowledge-state.json
-touch your-workspace/skills/knowledge-watcher/knowledge-diffs.jsonl
+Add this to your `AGENTS.md`:
+```
+After completing any task, log the result:
+npx agent-skill-bus record-run --agent claude --skill <skill-name> --task "<task>" --result <success|fail|partial> --score <0.0-1.0>
 ```
 
-### 3. Start logging skill runs
-
-After any skill execution in your agent, append a line:
-
-```jsonl
-{"ts":"2026-03-18T08:00:00Z","agent":"my-agent","skill":"web-search","task":"search query","result":"success","score":1.0,"notes":""}
-```
-
-That's it. The self-improving loop will pick it up.
+That's it. The self-improving loop runs automatically.
 
 ## Modules
 
