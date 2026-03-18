@@ -107,6 +107,18 @@ describe('PromptRequestQueue', () => {
     assert.strictEqual(pr2.status, 'blocked');
   });
 
+  it('should reject startExecution when files are already locked', () => {
+    const pr1 = queue.enqueue({ source: 'r1', agent: 'a', task: 'edit main', affectedFiles: ['src/main.ts'] });
+    const pr2 = queue.enqueue({ source: 'r2', agent: 'b', task: 'also edit main', affectedFiles: ['src/main.ts'] });
+
+    queue.startExecution(pr1.id);
+
+    // pr2 should throw on start because src/main.ts is locked
+    assert.throws(() => {
+      queue.startExecution(pr2.id);
+    }, /Lock conflict/);
+  });
+
   it('should return stats', () => {
     queue.enqueue({ source: 's1', agent: 'a', task: 'task 1' });
     queue.enqueue({ source: 's2', agent: 'b', task: 'task 2' });

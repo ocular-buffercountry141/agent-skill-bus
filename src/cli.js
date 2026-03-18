@@ -53,7 +53,9 @@ switch (command) {
   case 'init': {
     // Initialize skill-bus in current directory
     const initDir = getFlag('dir', process.cwd());
-    const { mkdirSync, writeFileSync: wf, existsSync: ex } = await import('node:fs');
+    const { mkdirSync, writeFileSync: wf, existsSync: ex, readFileSync: rf } = await import('node:fs');
+    const { dirname: dn, join: jn } = await import('node:path');
+    const { fileURLToPath } = await import('node:url');
 
     const dirs = [
       'skills/prompt-request-bus',
@@ -66,6 +68,7 @@ switch (command) {
       mkdirSync(full, { recursive: true });
     }
 
+    // Data files (empty/default)
     const files = {
       'skills/prompt-request-bus/prompt-request-queue.jsonl': '',
       'skills/prompt-request-bus/active-locks.jsonl': '',
@@ -87,16 +90,39 @@ switch (command) {
       }
     }
 
+    // Copy bundled SKILL.md files from package
+    const pkgDir = dn(dn(fileURLToPath(import.meta.url)));
+    const skillMds = [
+      'skills/prompt-request-bus/SKILL.md',
+      'skills/self-improving-skills/SKILL.md',
+      'skills/knowledge-watcher/SKILL.md',
+    ];
+
+    for (const s of skillMds) {
+      const dest = resolve(initDir, s);
+      const src = jn(pkgDir, s);
+      if (!ex(dest) && ex(src)) {
+        wf(dest, rf(src, 'utf-8'));
+        created++;
+      }
+    }
+
     output({
       status: 'initialized',
       directory: initDir,
       filesCreated: created,
-      message: `Agent Skill Bus initialized. Run 'skill-bus stats' to verify.`,
+      message: `Agent Skill Bus initialized with data files and SKILL.md guides. Run 'skill-bus stats' to verify.`,
     });
     break;
   }
 
   case 'enqueue': {
+    // Parse comma-separated list flags
+    const parseList = (name) => {
+      const val = getFlag(name, '');
+      return val ? val.split(',').map(s => s.trim()).filter(Boolean) : [];
+    };
+
     const pr = queue.enqueue({
       source: getFlag('source', 'human'),
       priority: getFlag('priority', 'medium'),
@@ -104,6 +130,10 @@ switch (command) {
       task: getFlag('task', ''),
       context: getFlag('context', ''),
       deadline: getFlag('deadline', 'none'),
+      affectedFiles: parseList('files'),
+      affectedSkills: parseList('skills'),
+      dependsOn: parseList('depends-on'),
+      dagId: getFlag('dag-id', null),
     });
     if (pr) {
       output({ status: 'enqueued', pr });
@@ -209,7 +239,7 @@ switch (command) {
   }
 
   default:
-    console.log(`Agent Skill Bus v1.0.0
+    console.log(`Agent Skill Bus v1.1.0
 
 Usage: skill-bus <command> [options]
        npx agent-skill-bus <command> [options]

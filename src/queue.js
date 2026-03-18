@@ -137,8 +137,16 @@ export class PromptRequestQueue {
     const pr = all.find(p => p.id === prId);
     if (!pr) throw new Error(`PR not found: ${prId}`);
 
-    // Acquire file locks
+    // Re-verify lock conflicts at execution time (not just dispatch time)
     if (pr.affectedFiles.length > 0) {
+      const currentLocks = this.readLocks();
+      const lockedFiles = new Set(currentLocks.flatMap(l => l.files));
+      const conflicts = pr.affectedFiles.filter(f => lockedFiles.has(f));
+      if (conflicts.length > 0) {
+        throw new Error(`Lock conflict: files [${conflicts.join(', ')}] are already locked. PR ${prId} cannot start.`);
+      }
+
+      // Acquire file locks
       const lock = {
         agent: pr.agent,
         files: pr.affectedFiles,
