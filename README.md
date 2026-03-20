@@ -4,7 +4,11 @@
 
 Built by [合同会社みやび (LLC Miyabi)](https://miyabi-ai.jp) — Running 42 AI agents in production daily.
 
+[![npm version](https://img.shields.io/npm/v/agent-skill-bus.svg)](https://www.npmjs.com/package/agent-skill-bus)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js CI](https://github.com/ShunsukeHayashi/agent-skill-bus/actions/workflows/ci.yml/badge.svg)](https://github.com/ShunsukeHayashi/agent-skill-bus/actions/workflows/ci.yml)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/agent-skill-bus)
+[![GitHub Discussions](https://img.shields.io/github/discussions/ShunsukeHayashi/agent-skill-bus)](https://github.com/ShunsukeHayashi/agent-skill-bus/discussions)
 
 ---
 
