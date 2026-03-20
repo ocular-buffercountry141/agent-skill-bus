@@ -189,6 +189,8 @@ When a change is detected:
 
 ## Framework Compatibility
 
+> **Detailed comparison**: See [docs/comparison.md](docs/comparison.md) for a full feature matrix vs. LangGraph, CrewAI, AutoGen, Mastra, and VoltAgent.
+
 Agent Skill Bus is **framework-agnostic**. It uses plain JSONL files as the data layer — no databases, no message brokers, no vendor lock-in.
 
 | Framework | Integration | Notes |
