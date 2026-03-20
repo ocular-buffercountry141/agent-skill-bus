@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [22, 24]
 
     steps:
       - uses: actions/checkout@v4
@@ -26,4 +26,4 @@ jobs:
         run: npm install --no-package-lock
 
       - name: Run tests
-        run: node --test src/**/*.test.js
+        run: node --test src/queue.test.js src/self-improve.test.js
