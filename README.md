@@ -10,6 +10,8 @@ Built by [合同会社みやび (LLC Miyabi)](https://miyabi-ai.jp) — Running 
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/agent-skill-bus)
 [![GitHub Discussions](https://img.shields.io/github/discussions/ShunsukeHayashi/agent-skill-bus)](https://github.com/ShunsukeHayashi/agent-skill-bus/discussions)
 
+> **Looking for the full ecosystem?** This repo is the core runtime. For **110+ production-ready skills**, marketplace, and the complete Miyabi Agent Society platform, visit **[agentskills.bath.me](https://agentskills.bath.me)**.
+
 ---
 
 ## What is this?
@@ -267,3 +269,7 @@ npx skill-bus run
 ### ライセンス
 
 MIT License — [合同会社みやび](https://miyabi-ai.jp)（代表: 林 駿甫）
+
+---
+
+> **完全版はこちら →** このリポジトリは Agent Skill Bus のコアランタイムです。**110以上の本番スキル**、マーケットプレイス、Miyabi Agent Society の全機能は **[agentskills.bath.me](https://agentskills.bath.me)** でご覧いただけます。
