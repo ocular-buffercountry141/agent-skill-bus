@@ -298,7 +298,7 @@ switch (command) {
   case 'record-run': {
     const entry = monitor.recordRun({
       agent: getFlag('agent', 'default'),
-      skill: getFlag('skills', ''),
+      skill: getFlag('skill', ''),
       task: getFlag('task', ''),
       result: getFlag('result', 'success'),
       score: parseFloat(getFlag('score', '1.0')),
@@ -308,7 +308,7 @@ switch (command) {
     break;
   }
 
-  case 'dones': {
+  case 'health': {
     const days = parseInt(getFlag('days', '7'), 10);
     const health = monitor.updateHealth(days);
     output(health);
@@ -337,7 +337,7 @@ switch (command) {
     // ANSI helpers
     const c = noColor
       ? { reset: '', bold: '', dim: '', red: '', green: '', yellow: '', blue: '', cyan: '', magenta: '', bgRed: '', bgGreen: '', bgYellow: '' }
-      : { reset: '\x1b[0m', bold: '\x1b[1m', dim: '\x1b[2m', red: '\x1b[31m', green: '\x1b[32m', yellow: '\x1b[33m', blue: '\x1b[34m', magenta: '\x1b[35m', bgRed: '\x1b[41m', bgGreen: '\x1b[42m', bgYellow: '\x1b[43m' };
+      : { reset: '\x1b[0m', bold: '\x1b[1m', dim: '\x1b[2m', red: '\x1b[31m', green: '\x1b[32m', yellow: '\x1b[33m', blue: '\x1b[34m', cyan: '\x1b[36m', magenta: '\x1b[35m', bgRed: '\x1b[41m', bgGreen: '\x1b[42m', bgYellow: '\x1b[43m' };
 
     const bar = (score, width = 20) => {
       const filled = Math.round(score * width);
@@ -376,34 +376,44 @@ switch (command) {
     const entries = Object.entries(health);
     if (entries.length === 0) {
       console.log(`  ${c.dim}No skill runs recorded yet.${c.reset}`);
-      console.log(`  ${c.dim}Run: npx agent-skill-bus record-run --agent my-agent --skill cli --task "check" --result success --score 0.9${c.reset}`);
+      console.log(`  ${c.dim}Run: npx agent-skill-bus record-run --agent my-agent --skill my-skill --task "test" --result success --score 0.9${c.reset}`);
     } else {
-      console.log(`  ${c.bold}Skills${c.reset}  ${c.dim}(${entries.length} tracked)${c.reset}`);
+      console.log(`${c.bold}  Skills${c.reset}  ${c.dim}(${entries.length} tracked)${c.reset}`);
       console.log(`  ${c.dim}${'─'.repeat(58)}${c.reset}`);
-      console.log(`  ${c.dim}  Status  Skill                 Score  Trend  Runs  Fails${c.reset}`);
+      console.log(`  ${c.dim}  Status  Skill                Score  Trend  Runs  Fails${c.reset}`);
       console.log(`  ${c.dim}${'─'.repeat(58)}${c.reset}`);
+
+      // Sort: flagged first, then by score ascending
       entries.sort((a, b) => {
         if (a[1].flagged !== b[1].flagged) return b[1].flagged ? 1 : -1;
         return a[1].avgScore - b[1].avgScore;
       });
+
       for (const [name, data] of entries) {
-        const displayName = name.length > 18 ? name.slice(0, 17) + '… : name.padEnd(18);
+        const displayName = name.length > 18 ? name.slice(0, 17) + '…' : name.padEnd(18);
         const scoreStr = data.avgScore.toFixed(2).padStart(5);
         const scoreColor = data.avgScore >= 0.8 ? c.green : data.avgScore >= 0.6 ? c.yellow : c.red;
         const runsStr = String(data.runs).padStart(4);
-        const failsStr = data.consecutiveFails > 0 ? c.red + String(data.consecutiveFails).padStart(4) + c.reset : c.dim + '   0' + c.reset;
+        const failsStr = data.consecutiveFails > 0
+          ? c.red + String(data.consecutiveFails).padStart(4) + c.reset
+          : c.dim + '   0' + c.reset;
         console.log(`  ${statusDot(data.flagged)}  ${displayName}  ${scoreColor}${scoreStr}${c.reset}  ${trendIcon(data.trend)}     ${runsStr}  ${failsStr}`);
       }
-      console.log(`  ${c.dim}${'┈'.repeat(58)}${c.reset}`);
-      console.log();
+      console.log(`  ${c.dim}${'─'.repeat(58)}${c.reset}`);
+
+      // Score distribution bar chart
       const flaggedCount = entries.filter(([_, d]) => d.flagged).length;
       const healthyCount = entries.length - flaggedCount;
+      console.log();
       console.log(`  ${c.green}● Healthy: ${healthyCount}${c.reset}  ${c.red}● Flagged: ${flaggedCount}${c.reset}`);
+
       if (flaggedCount > 0) {
         console.log();
         console.log(`  ${c.bold}${c.red}⚠ Flagged Skills${c.reset}`);
         for (const [name, data] of entries.filter(([_, d]) => d.flagged)) {
-          const reason = data.trend === 'broken' ? 'consecutive failures' : data.trend === 'declining' ? 'score declining : `avg score ${data.avgScore.toFixed(2)} < 0.70`;
+          const reason = data.trend === 'broken' ? 'consecutive failures'
+            : data.trend === 'declining' ? 'score declining'
+            : `avg score ${data.avgScore.toFixed(2)} < 0.70`;
           console.log(`  ${c.red}→${c.reset} ${name}: ${reason}  ${bar(data.avgScore, 15)}`);
         }
       }
